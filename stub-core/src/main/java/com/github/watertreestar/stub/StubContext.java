@@ -1,7 +1,7 @@
-package com.github.watertree.stub;
+package com.github.watertreestar.stub;
 
-import com.github.watertree.stub.proxy.AbstractStubHandler;
-import com.github.watertree.stub.proxy.ProxyFactory;
+import com.github.watertreestar.stub.proxy.AbstractStubHandler;
+import com.github.watertreestar.stub.proxy.ProxyFactory;
 
 /**
  * 创建stub代理上下文

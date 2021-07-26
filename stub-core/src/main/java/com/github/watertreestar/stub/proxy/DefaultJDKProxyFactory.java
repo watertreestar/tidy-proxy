@@ -1,7 +1,7 @@
-package com.github.watertree.stub.proxy;
+package com.github.watertreestar.stub.proxy;
 
-import com.github.watertree.stub.StubContext;
-import com.github.watertree.stub.StubException;
+import com.github.watertreestar.stub.StubContext;
+import com.github.watertreestar.stub.StubException;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 

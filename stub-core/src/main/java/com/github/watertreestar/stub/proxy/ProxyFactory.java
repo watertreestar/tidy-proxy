@@ -1,6 +1,6 @@
-package com.github.watertree.stub.proxy;
+package com.github.watertreestar.stub.proxy;
 
-import com.github.watertree.stub.StubContext;
+import com.github.watertreestar.stub.StubContext;
 
 /**
  * A abstract to create proxy for a class

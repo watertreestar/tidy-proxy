@@ -1,8 +1,8 @@
-package com.github.watertree.stub.annotation;
+package com.github.watertreestar.stub.annotation;
 
-import com.github.watertree.stub.proxy.AbstractStubHandler;
-import com.github.watertree.stub.proxy.DefaultJDKProxyFactory;
-import com.github.watertree.stub.proxy.ProxyFactory;
+import com.github.watertreestar.stub.proxy.AbstractStubHandler;
+import com.github.watertreestar.stub.proxy.DefaultJDKProxyFactory;
+import com.github.watertreestar.stub.proxy.ProxyFactory;
 
 import java.lang.annotation.*;
 
