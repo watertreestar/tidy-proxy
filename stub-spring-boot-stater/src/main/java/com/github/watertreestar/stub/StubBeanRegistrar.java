@@ -32,6 +32,9 @@ public class StubBeanRegistrar implements ImportBeanDefinitionRegistrar {
             pkgList.add(ClassUtils.getPackageName(importingClassMetadata.getClassName()));
         }
 
+        /**
+         * todo 没有成功注册bean到context中 fix
+         */
         ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(registry, false);
         scanner.resetFilters(false);
         AnnotationTypeFilter proxyStubFilter = new AnnotationTypeFilter(ProxyStub.class, true, false);
