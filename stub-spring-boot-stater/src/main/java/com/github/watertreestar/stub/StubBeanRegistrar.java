@@ -2,7 +2,6 @@ package com.github.watertreestar.stub;
 
 import com.github.watertreestar.stub.annotation.ProxyStub;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.boot.autoconfigure.AutoConfigurationPackages;
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.annotation.AnnotationAttributes;
@@ -11,7 +10,6 @@ import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
@@ -35,10 +33,7 @@ public class StubBeanRegistrar implements ImportBeanDefinitionRegistrar {
         /**
          * todo 没有成功注册bean到context中 fix
          */
-        ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(registry, false);
-        scanner.resetFilters(false);
-        AnnotationTypeFilter proxyStubFilter = new AnnotationTypeFilter(ProxyStub.class, true, false);
-        scanner.addIncludeFilter(proxyStubFilter);
+        StubClassPathScanner scanner = new StubClassPathScanner(registry, true);
         scanner.scan(StringUtils.toStringArray(pkgList));
     }
 }
