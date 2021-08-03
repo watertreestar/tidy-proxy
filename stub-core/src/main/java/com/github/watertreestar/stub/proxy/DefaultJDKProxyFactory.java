@@ -41,7 +41,7 @@ public class DefaultJDKProxyFactory implements ProxyFactory {
     /**
      * 用于JDK动态代理的InvocationHandler
      */
-    static class StubInvocationHandler implements InvocationHandler {
+    public static class StubInvocationHandler implements InvocationHandler {
         AbstractStubHandler handler;
         StubContext context;
 
@@ -50,8 +50,8 @@ public class DefaultJDKProxyFactory implements ProxyFactory {
             this.context = context;
         }
 
-        public static StubInvocationHandler newInstance(AbstractStubHandler handler,StubContext context) {
-            return new StubInvocationHandler(handler,context);
+        public static StubInvocationHandler newInstance(AbstractStubHandler handler, StubContext context) {
+            return new StubInvocationHandler(handler, context);
         }
 
         @Override

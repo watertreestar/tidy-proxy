@@ -2,26 +2,29 @@ package com.github.watertreestar.stub;
 
 import com.github.watertreestar.stub.annotation.ProxyStub;
 import com.github.watertreestar.stub.proxy.AbstractStubHandler;
-import com.github.watertreestar.stub.proxy.DefaultJDKProxyFactory;
 import com.github.watertreestar.stub.proxy.ProxyFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.FactoryBean;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 import org.springframework.context.annotation.ScannedGenericBeanDefinition;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.ReflectionUtils;
 
-import java.io.IOException;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -87,9 +90,65 @@ public class StubClassPathScanner extends ClassPathBeanDefinitionScanner {
             return;
         }
 
-        ProxyFactory factory = new DefaultJDKProxyFactory();
-        StubContext context = new StubContext(interfaceClass,proxyFactory, handler);
-        Object instance = factory.createProxy(interfaceClass,context);
-        beanDefinition.setBeanClass(instance.getClass());
+        beanDefinition.getConstructorArgumentValues().addGenericArgumentValue(beanDefinition.getBeanClassName());
+
+        beanDefinition.getPropertyValues().add("proxyFactory", proxyFactory);
+        beanDefinition.getPropertyValues().add("handler", handler);
+
+        beanDefinition.setBeanClass(BaseFactoryBean.class);
+    }
+
+    static class BaseFactoryBean<T> implements FactoryBean<T>, InitializingBean, ApplicationListener<ApplicationEvent>,
+            ApplicationContextAware {
+
+        private ApplicationContext context;
+
+        private Class<T> serviceInterface;
+
+        private Class<? extends ProxyFactory> proxyFactory;
+
+        private Class<? extends AbstractStubHandler> handler;
+
+        public BaseFactoryBean(Class<T> serviceInterface) {
+            this.serviceInterface = serviceInterface;
+        }
+
+        @Override
+        public T getObject() throws Exception {
+            StubContext context = new StubContext(serviceInterface, proxyFactory, handler);
+            ProxyFactory factoryInstance = ReflectionUtils.accessibleConstructor(proxyFactory).newInstance();
+            Object instance = factoryInstance.createProxy(serviceInterface, context);
+            return (T) instance;
+        }
+
+        @Override
+        public Class<?> getObjectType() {
+            return serviceInterface;
+        }
+
+        @Override
+        public void afterPropertiesSet() throws Exception {
+            if (serviceInterface == null) {
+                throw new IllegalStateException("ServiceInterface can not be null");
+            }
+        }
+
+        @Override
+        public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+            this.context = applicationContext;
+        }
+
+        @Override
+        public void onApplicationEvent(ApplicationEvent event) {
+
+        }
+
+        public void setProxyFactory(Class<? extends ProxyFactory> proxyFactory) {
+            this.proxyFactory = proxyFactory;
+        }
+
+        public void setHandler(Class<? extends AbstractStubHandler> handler) {
+            this.handler = handler;
+        }
     }
 }
