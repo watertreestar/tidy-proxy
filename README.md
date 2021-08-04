@@ -10,3 +10,8 @@
 
 提供stub代理的开关配置
 
+- [x] 提供`@EnableStubProxy`来启用或者禁用代理
+- [ ] 单个Stub的enable支持
+
+## Spring中如何在启动的时候动态注册Bean
+
