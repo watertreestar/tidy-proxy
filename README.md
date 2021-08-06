@@ -1,6 +1,6 @@
-# tidy-stub
+# tidy-proxy
 
-基于Spring为类生成一个stub
+基于Spring为类生成一个stub proxy
 
 ## 背景
 

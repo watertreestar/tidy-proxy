@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.watertreestar</groupId>
-    <artifactId>tidy-stub</artifactId>
+    <artifactId>tidy-proxy</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>stub-core</module>
-        <module>stub-spring-boot-stater</module>
+        <module>proxy-core</module>
+        <module>proxy-spring-boot-stater</module>
     </modules>
 
     <properties>

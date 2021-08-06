@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>tidy-stub</artifactId>
+        <artifactId>tidy-proxy</artifactId>
         <groupId>com.github.watertreestar</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>stub-spring-boot-stater</artifactId>
+    <artifactId>proxy-spring-boot-stater</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -38,7 +38,7 @@
 
         <dependency>
             <groupId>com.github.watertreestar</groupId>
-            <artifactId>stub-core</artifactId>
+            <artifactId>proxy-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
