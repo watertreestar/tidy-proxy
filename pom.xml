@@ -11,6 +11,7 @@
     <modules>
         <module>proxy-core</module>
         <module>proxy-spring-boot-stater</module>
+        <module>retrofit2-proxy</module>
     </modules>
 
     <properties>
