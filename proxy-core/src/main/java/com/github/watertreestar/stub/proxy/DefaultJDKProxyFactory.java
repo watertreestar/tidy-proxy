@@ -14,13 +14,13 @@ import java.lang.reflect.Proxy;
  */
 public class DefaultJDKProxyFactory implements ProxyFactory {
     @Override
-    public <T> T createProxy(Class<?> classType, StubContext context) {
+    public <T> T createProxy(Class<T> classType, StubContext context) {
         Class<? extends AbstractStubHandler> handlerClass = context.getHandler();
         AbstractStubHandler handler = this.handlerInstance(handlerClass);
-        return (T)Proxy.newProxyInstance(
+        return (T) Proxy.newProxyInstance(
                 ClassUtils.getDefaultClassLoader(),
                 new Class[]{classType},
-                StubInvocationHandler.newInstance(handler,context));
+                StubInvocationHandler.newInstance(handler, context));
     }
 
     /**
