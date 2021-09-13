@@ -11,6 +11,4 @@ import java.lang.annotation.*;
 @ProxyStub(proxyFactory = HttpClientProxyFactory.class)
 public @interface HttpClient {
     String baseUrl() default "";
-
-    String value() default "";
 }
