@@ -9,5 +9,7 @@ import java.lang.annotation.*;
 @Documented
 @Import(StubBeanRegistrar.class)
 public @interface EnableStubProxy {
-    String []basePackages() default {};
+    String[] basePackages() default {};
+
+    String[] value() default {};
 }

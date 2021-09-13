@@ -117,6 +117,9 @@ public class StubClassPathScanner extends ClassPathBeanDefinitionScanner {
         public T getObject() throws Exception {
             StubContext context = new StubContext(serviceInterface, proxyFactory, handler);
             ProxyFactory factoryInstance = ReflectionUtils.accessibleConstructor(proxyFactory).newInstance();
+            if (factoryInstance instanceof ApplicationContextAware) {
+                ((ApplicationContextAware) factoryInstance).setApplicationContext(this.context);
+            }
             Object instance = factoryInstance.createProxy(serviceInterface, context);
             return (T) instance;
         }

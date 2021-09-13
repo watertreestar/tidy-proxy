@@ -1,13 +1,25 @@
 package com.github.watertreestar.proxy.retrofit2;
 
 import com.github.watertreestar.proxy.retrofit2.client.TestClient;
-import junit.framework.TestCase;
+import com.github.watertreestar.stub.EnableStubProxy;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
-public class HttpClientProxyFactoryTest extends TestCase {
+import java.io.IOException;
 
-    public void testCreateProxy() {
-        HttpClientProxyFactory factory = new HttpClientProxyFactory();
+@SpringBootTest
+@RunWith(SpringRunner.class)
+@EnableStubProxy
+public class HttpClientProxyFactoryTest {
+    @Autowired
+    private TestClient testClient;
 
-        TestClient client = factory.createProxy(TestClient.class, null);
+    @Test
+    public void test() throws IOException {
+        String text = testClient.get().message();
+        System.out.println(text);
     }
 }

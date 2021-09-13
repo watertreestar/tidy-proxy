@@ -1,5 +1,6 @@
 package com.github.watertreestar.proxy.retrofit2;
 
+import com.github.watertreestar.proxy.retrofit2.adapter.ResponseAdapterFactory;
 import com.github.watertreestar.proxy.retrofit2.annotation.HttpClient;
 import com.github.watertreestar.proxy.retrofit2.annotation.HttpInterceptor;
 import com.github.watertreestar.proxy.retrofit2.http.DefaultOkHttpClientLoader;
@@ -8,6 +9,7 @@ import com.github.watertreestar.stub.StubContext;
 import com.github.watertreestar.stub.proxy.ProxyFactory;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -29,7 +31,9 @@ public class HttpClientProxyFactory implements ProxyFactory, ApplicationContextA
 
     private ApplicationContext applicationContext;
 
-    private static OkHttpClient DEFAULT_HTTP_CLIENT;
+    private static final OkHttpClient DEFAULT_HTTP_CLIENT;
+
+    private static final ResponseAdapterFactory RESPONSE_ADAPTER_FACTORY = new ResponseAdapterFactory();
 
     static {
         ServiceLoader<OkHttpClientLoader> loaders = ServiceLoader.load(OkHttpClientLoader.class);
@@ -54,6 +58,7 @@ public class HttpClientProxyFactory implements ProxyFactory, ApplicationContextA
         String baseUrl = buildBaseUrl(httpClient);
         Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
                 .baseUrl(baseUrl)
+                .addCallAdapterFactory(RESPONSE_ADAPTER_FACTORY)
                 .callFactory(callFactory);
         log.debug("new Retrofit HttpClient.interface：" + stubInterface + " baseUrl：" + baseUrl);
         Retrofit retrofit = retrofitBuilder.build();
@@ -61,7 +66,7 @@ public class HttpClientProxyFactory implements ProxyFactory, ApplicationContextA
     }
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    public void setApplicationContext(@NotNull ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
 
@@ -69,7 +74,7 @@ public class HttpClientProxyFactory implements ProxyFactory, ApplicationContextA
         String baseUrl = httpClient.baseUrl();
         if (StringUtils.hasText(baseUrl)) {
             baseUrl = baseUrl.trim();
-            baseUrl = applicationContext.getEnvironment().resolveRequiredPlaceholders(baseUrl);
+            baseUrl = this.applicationContext.getEnvironment().resolveRequiredPlaceholders(baseUrl);
             if (!baseUrl.endsWith("/")) {
                 baseUrl += "/";
             }
