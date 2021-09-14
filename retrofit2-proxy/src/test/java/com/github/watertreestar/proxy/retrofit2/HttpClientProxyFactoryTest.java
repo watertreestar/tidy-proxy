@@ -19,7 +19,6 @@ public class HttpClientProxyFactoryTest {
 
     @Test
     public void test() throws IOException {
-        String text = testClient.get().message();
-        System.out.println(text);
+       testClient.get().execute().message();
     }
 }

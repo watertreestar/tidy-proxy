@@ -1,5 +1,7 @@
 package com.github.watertreestar.proxy.retrofit2;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.watertreestar.proxy.retrofit2.adapter.ResponseAdapterFactory;
 import com.github.watertreestar.proxy.retrofit2.annotation.HttpClient;
 import com.github.watertreestar.proxy.retrofit2.annotation.HttpInterceptor;
@@ -15,13 +17,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.StringUtils;
 import retrofit2.Retrofit;
+import retrofit2.converter.jackson.JacksonConverterFactory;
 
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.ServiceLoader;
+
+import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS;
 
 /**
  * HttpClient代理创建
@@ -59,6 +65,7 @@ public class HttpClientProxyFactory implements ProxyFactory, ApplicationContextA
         Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addCallAdapterFactory(RESPONSE_ADAPTER_FACTORY)
+                .addConverterFactory(jacksonConverterFactory())
                 .callFactory(callFactory);
         log.debug("new Retrofit HttpClient.interface：" + stubInterface + " baseUrl：" + baseUrl);
         Retrofit retrofit = retrofitBuilder.build();
@@ -92,11 +99,19 @@ public class HttpClientProxyFactory implements ProxyFactory, ApplicationContextA
     private <T> Call.Factory buildCallFactory(Class<T> stubInterface) {
         OkHttpClient.Builder builder = DEFAULT_HTTP_CLIENT.newBuilder();
 
-        AnnotationUtils.getRepeatableAnnotations(stubInterface, HttpInterceptor.class)
+        AnnotatedElementUtils.getMergedRepeatableAnnotations(stubInterface, HttpInterceptor.class)
                 .stream()
                 .sorted(Comparator.comparing(HttpInterceptor::index, Integer::compareTo))
                 .map(it -> applicationContext.getBean(it.value()))
                 .forEach(builder::addInterceptor);
         return (Call.Factory) builder.build();
+    }
+
+    private JacksonConverterFactory jacksonConverterFactory() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        mapper.configure(WRITE_DATES_AS_TIMESTAMPS, false);
+
+        return JacksonConverterFactory.create(mapper);
     }
 }
