@@ -25,7 +25,7 @@
 
 - [x] 提供`@EnableStubProxy`来启用或者禁用代理
 - [ ] 单个Stub的enable支持
-- [ ] 基于tidy-proxy实现retrofit2的代理
+- [x] 基于tidy-proxy实现retrofit2的代理
 
 ## Spring中如何动态注册Bean
 
@@ -56,4 +56,8 @@
 在该类中也是持有了了一个BeanDefinitionRegistry实例
 
 所以，归根结底，我们只要获取了`BeanDefinitionRegistry`或者`SingletonBeanRegistry`的一个实例就可以注册bean到Spring容器中
+
+## retrofit2-proxy
+
+使用tidy-proxy提供动态注册bean的能力，基于retrofit实现了一个类似于feignd的组件
 
