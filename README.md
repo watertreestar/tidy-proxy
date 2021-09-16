@@ -59,5 +59,5 @@
 
 ## retrofit2-proxy
 
-使用tidy-proxy提供动态注册bean的能力，基于retrofit实现了一个类似于feignd的组件
+使用tidy-proxy提供动态注册bean的能力，基于retrofit实现了一个类似于feign的组件
 
